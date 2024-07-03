@@ -1,2 +1,4 @@
 brb
 *.o
+*.a
+./tests/brb_test
