@@ -1,4 +1,4 @@
-#include "Process.hpp"
+#include "process.hpp"
 
 // Define the program entry point
 extern "C" void _start();
