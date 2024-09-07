@@ -14,6 +14,6 @@ namespace brb
 			// print
 		}
 
-		exit(1);
+		exit(-1);
 	}
 }
