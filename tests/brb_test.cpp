@@ -1,22 +1,27 @@
 #include "memory.hpp"
 #include "print.hpp"
-#include "string.hpp"
+
+struct test
+{
+	test()
+	{
+		brb::print("constructed\n");
+	}
+
+	~test()
+	{
+		brb::print("destructed\n");
+	}
+
+	const char* c = "test\n";
+};
 
 mu8 brb_main()
 {
-	char* character = new char;
-	char* another_char = new char;
+	test* t = new test[3];
+	delete[] t;
 
-	*character = 'A';
-	*another_char = 'B';
-
-	char text[4];
-	text[0] = *character;
-	text[1] = *another_char;
-	text[2] = '\n';
-	text[3] = '\0';
-
-	brb::print(text);
+	brb::assert(allocated_block_count() == 0, "memory leakage");
 
 	return 0;
 }

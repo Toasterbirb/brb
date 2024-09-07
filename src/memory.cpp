@@ -20,9 +20,17 @@ struct block
 	bool used{false};
 };
 
-block blocks {nullptr, nullptr, 0, true};
+static block blocks {nullptr, nullptr, 0, true};
 
-void* operator new(u64 size)
+// keep track of allocated blocks to spot memory leakage
+static mu64 block_allocation_counter{0};
+
+mu64 allocated_block_count()
+{
+	return block_allocation_counter;
+}
+
+void* malloc(u64 size)
 {
 	// go through the memory blocks and attempt to find a fitting block
 
@@ -56,5 +64,44 @@ void* operator new(u64 size)
 	brb::assert(b->size != 0, "empty memory block");
 	brb::assert(b->used, "new memory block left unused");
 	brb::assert(b->addr != nullptr, "new address was a nullptr");
+
+	++block_allocation_counter;
 	return b->addr;
+}
+
+void free(void* addr)
+{
+	block* b = static_cast<block*>(addr);
+	b->used = false;
+	--block_allocation_counter;
+}
+
+void* operator new(u64 size)
+{
+	return malloc(size);
+}
+
+void* operator new[](u64 size)
+{
+	return malloc(size);
+}
+
+void operator delete(void* addr) noexcept
+{
+	free(addr);
+}
+
+void operator delete(void* addr, u64 size) noexcept
+{
+	free(addr);
+}
+
+void operator delete[](void* addr) noexcept
+{
+	free(addr);
+}
+
+void operator delete[](void* addr, u64 size) noexcept
+{
+	free(addr);
 }
