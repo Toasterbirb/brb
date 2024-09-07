@@ -1,7 +1,7 @@
 #include "print.hpp"
 #include "string.hpp"
 
-mi32 brb_main()
+mu8 brb_main()
 {
 	brb::array<mu64, 4> arr;
 	arr.fill(0);
@@ -14,8 +14,5 @@ mi32 brb_main()
 	if (arr[2] == 2)
 		brb::print(big_str);
 
-	brb::string<8> small_str = "asdfasdfasdf";
-
-	brb::print("this point shouldn't get reached\n");
-	return 0;
+	return 3;
 }
