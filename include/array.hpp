@@ -33,6 +33,24 @@ namespace brb
 			return _data[index];
 		}
 
+		constexpr bool operator==(const array& other) const
+		{
+			for (mu64 i = 0; i < _size; ++i)
+				if (_data[i] != other._data[i])
+					return false;
+
+			return true;
+		}
+
+		constexpr bool operator!=(const array& other) const
+		{
+			for (mu64 i = 0; i < _size; ++i)
+				if (_data[i] != other._data[i])
+					return true;
+
+			return false;
+		}
+
 	private:
 		T _data[N];
 		u64 _size = N;
