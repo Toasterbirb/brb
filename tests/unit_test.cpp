@@ -27,5 +27,7 @@ mu8 brb_main()
 	testing test;
 	string_tests(test);
 
+	test.check("unit tests don't leak memory", brb::allocated_block_count() == 0);
+
 	return 0;
 }
