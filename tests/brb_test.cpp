@@ -3,9 +3,9 @@
 mi32 brb_main()
 {
 	brb::array<mi32, 4> arr;
+	arr.fill(9);
 
-	for (mi32 i = 0; i < arr.size() + 2; ++i)
-		arr[i] = i;
+	arr[2] = 5;
 
 	return arr[2];
 }

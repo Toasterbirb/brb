@@ -10,12 +10,21 @@ namespace brb
 	{
 	public:
 		constexpr array() {}
-		constexpr array(T data[N])
+		constexpr array(const T data[N]) { this->data = data; }
+
+		constexpr u64 size() const { return _size; }
+
+		constexpr void fill(const T value)
 		{
-			this->data = data;
+			for (mu64 i = 0; i < _size; ++i)
+				data[i] = value;
 		}
 
-		u64 size() const { return _size; }
+		constexpr T operator[](u64 index) const
+		{
+			ensure(index < _size);
+			return data[index];
+		}
 
 		constexpr T& operator[](u64 index)
 		{
