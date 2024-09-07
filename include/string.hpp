@@ -29,6 +29,11 @@ namespace brb
 				_data[i] = str[i];
 		}
 
+		~string()
+		{
+			delete[] _data;
+		}
+
 		constexpr mu64 size() const { return _size; }
 		constexpr bool empty() const { return _size == 0; }
 
