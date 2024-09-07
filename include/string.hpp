@@ -75,6 +75,18 @@ namespace brb
 			return true;
 		}
 
+		bool operator!=(const string& other) const
+		{
+			if (_size != other._size)
+				return true;
+
+			for (mu64 i = 0; i < _size; ++i)
+				if (_data[i] != other._data[i])
+					return true;
+
+			return false;
+		}
+
 	private:
 		mu64 capacity{0};
 		mu64 _size{0};
