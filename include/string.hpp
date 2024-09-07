@@ -32,7 +32,13 @@ namespace brb
 		constexpr mu64 size() const { return _size; }
 		constexpr mu64 capacity() const { return max_size; }
 		constexpr bool empty() const { return _size == 0; }
+
 		char* data() { return _data.data(); }
+		void set_size(u64 new_size)
+		{
+			ensure(new_size <= max_size, "the new size is larger than the capacity of the string");
+			_size = new_size;
+		}
 
 		constexpr void clear() { _size = 0; }
 

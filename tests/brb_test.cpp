@@ -1,18 +1,16 @@
 #include "print.hpp"
+#include "read.hpp"
 #include "string.hpp"
 
 mu8 brb_main()
 {
-	brb::array<mu64, 4> arr;
-	arr.fill(0);
+	brb::string<16> str;
 
-	for (mu8 i = 0; i < arr.size(); ++i)
-		arr[i] = 2;
+	brb::print("Write something: ");
+	brb::read(str);
 
-	brb::string<64> big_str = "asdfas\n";
-
-	if (arr[2] == 2)
-		brb::print(big_str);
+	brb::print("Read string: ");
+	brb::print(str);
 
 	return 3;
 }
