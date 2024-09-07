@@ -25,83 +25,86 @@ static block blocks {nullptr, nullptr, 0, true};
 // keep track of allocated blocks to spot memory leakage
 static mu64 block_allocation_counter{0};
 
-mu64 allocated_block_count()
+namespace brb
 {
-	return block_allocation_counter;
-}
-
-void* malloc(u64 size)
-{
-	// go through the memory blocks and attempt to find a fitting block
-
-	block* b = &blocks;
-	while ((b->used || b->size < size) && b->next != nullptr)
-		b = b->next;
-
-	// if no fitting blocks were found, allocate a new one and add it to the chain
-
-	if (b->used)
+	mu64 allocated_block_count()
 	{
-		u64 block_size = size + sizeof(block);
-		block* new_block = static_cast<block*>(brb::syscall::mmap(0, block_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
-		brb::assert(new_block != nullptr, "got a nullptr from mmap");
-
-		// create a link between the last block and the new block
-		b->next = new_block;
-
-		// calculate the address where the data should go to
-		new_block->addr = new_block + sizeof(block);
-
-		// set the rest of the variables
-		new_block->size = block_size;
-		new_block->used = true;
-		new_block->next = nullptr;
-
-		// move into the new block
-		b = new_block;
+		return block_allocation_counter;
 	}
 
-	brb::assert(b->size != 0, "empty memory block");
-	brb::assert(b->used, "new memory block left unused");
-	brb::assert(b->addr != nullptr, "new address was a nullptr");
+	void* malloc(u64 size)
+	{
+		// go through the memory blocks and attempt to find a fitting block
 
-	++block_allocation_counter;
-	return b->addr;
-}
+		block* b = &blocks;
+		while ((b->used || b->size < size) && b->next != nullptr)
+			b = b->next;
 
-void free(void* addr)
-{
-	block* b = static_cast<block*>(addr);
-	b->used = false;
-	--block_allocation_counter;
+		// if no fitting blocks were found, allocate a new one and add it to the chain
+
+		if (b->used)
+		{
+			u64 block_size = size + sizeof(block);
+			block* new_block = static_cast<block*>(brb::syscall::mmap(0, block_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
+			brb::assert(new_block != nullptr, "got a nullptr from mmap");
+
+			// create a link between the last block and the new block
+			b->next = new_block;
+
+			// calculate the address where the data should go to
+			new_block->addr = new_block + sizeof(block);
+
+			// set the rest of the variables
+			new_block->size = block_size;
+			new_block->used = true;
+			new_block->next = nullptr;
+
+			// move into the new block
+			b = new_block;
+		}
+
+		brb::assert(b->size != 0, "empty memory block");
+		brb::assert(b->used, "new memory block left unused");
+		brb::assert(b->addr != nullptr, "new address was a nullptr");
+
+		++block_allocation_counter;
+		return b->addr;
+	}
+
+	void free(void* addr)
+	{
+		block* b = static_cast<block*>(addr);
+		b->used = false;
+		--block_allocation_counter;
+	}
 }
 
 void* operator new(u64 size)
 {
-	return malloc(size);
+	return brb::malloc(size);
 }
 
 void* operator new[](u64 size)
 {
-	return malloc(size);
+	return brb::malloc(size);
 }
 
 void operator delete(void* addr) noexcept
 {
-	free(addr);
+	brb::free(addr);
 }
 
 void operator delete(void* addr, u64 size) noexcept
 {
-	free(addr);
+	brb::free(addr);
 }
 
 void operator delete[](void* addr) noexcept
 {
-	free(addr);
+	brb::free(addr);
 }
 
 void operator delete[](void* addr, u64 size) noexcept
 {
-	free(addr);
+	brb::free(addr);
 }

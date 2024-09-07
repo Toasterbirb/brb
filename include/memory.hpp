@@ -2,10 +2,12 @@
 
 #include "types.hpp"
 
-mu64 allocated_block_count();
-
-void* malloc(u64 size);
-void free(void* addr);
+namespace brb
+{
+	mu64 allocated_block_count();
+	void* malloc(u64 size);
+	void free(void* addr);
+}
 
 void* operator new(u64 size);
 void* operator new[](u64 size);
