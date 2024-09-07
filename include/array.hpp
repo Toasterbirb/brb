@@ -12,28 +12,29 @@ namespace brb
 		constexpr array() {}
 		constexpr array(const T data[N]) { this->data = data; }
 
-		constexpr u64 size() const { return _size; }
+		constexpr mu64 size() const { return _size; }
+		T* data() { return &_data[0]; }
 
 		constexpr void fill(const T value)
 		{
 			for (mu64 i = 0; i < _size; ++i)
-				data[i] = value;
+				_data[i] = value;
 		}
 
 		constexpr T operator[](u64 index) const
 		{
-			ensure(index < _size);
-			return data[index];
+			ensure(index < _size, "index out-of-bounds");
+			return _data[index];
 		}
 
 		constexpr T& operator[](u64 index)
 		{
-			ensure(index < _size);
-			return data[index];
+			ensure(index < _size, "index out-of-bounds");
+			return _data[index];
 		}
 
 	private:
-		T data[N];
+		T _data[N];
 		u64 _size = N;
 	};
 }
