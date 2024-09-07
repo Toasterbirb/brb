@@ -1,16 +1,22 @@
+#include "memory.hpp"
 #include "print.hpp"
-#include "read.hpp"
 #include "string.hpp"
 
 mu8 brb_main()
 {
-	brb::string<16> str;
+	char* character = new char;
+	char* another_char = new char;
 
-	brb::print("Write something: ");
-	brb::read(str);
+	*character = 'A';
+	*another_char = 'B';
 
-	brb::print("Read string: ");
-	brb::print(str);
+	char text[4];
+	text[0] = *character;
+	text[1] = *another_char;
+	text[2] = '\n';
+	text[3] = '\0';
 
-	return 3;
+	brb::print(text);
+
+	return 0;
 }

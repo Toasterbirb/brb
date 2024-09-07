@@ -54,5 +54,31 @@ namespace brb
 						int $0x80
 			)");
 		}
+
+		void* mmap(u64 address, u64 len, u64 prot, u64 flags, u64 fd, u64 off)
+		{
+			void* ret_addr{nullptr};
+
+			asm volatile (R"(
+				.global mmap
+					mmap:
+						mov $9, %%rax
+						mov %[address], %%rdi
+						mov %[len], %%rsi
+						mov %[prot], %%rdx
+						mov %[flags], %%r10
+						mov %[fd], %%r8
+						mov %[off], %%r9
+						syscall
+
+						mov %%rax, %[ret_addr]
+				)"
+				:
+				: [address] "m" (address), [len] "m" (len), [prot] "m" (prot), [flags] "m" (flags), [fd] "m" (fd), [off] "m" (off), [ret_addr] "m" (ret_addr)
+				: "rax", "rdi", "rsi", "rdx", "r10", "r8", "r9"
+			);
+
+			return ret_addr;
+		}
 	}
 }
