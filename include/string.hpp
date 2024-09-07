@@ -7,7 +7,7 @@ namespace brb
 {
 	constexpr mu64 strlen(const char* const str)
 	{
-		ensure(str != nullptr);
+		assert(str != nullptr);
 
 		mu64 len{0};
 		while (str[len] != '\0')
@@ -23,7 +23,7 @@ namespace brb
 		constexpr string(const char* const str)
 		{
 			_size = strlen(str);
-			ensure(_size <= max_size, "string out of capacity");
+			assert(_size <= max_size, "string out of capacity");
 
 			for (mu64 i = 0; i < _size; ++i)
 				_data[i] = str[i];
@@ -36,7 +36,7 @@ namespace brb
 		char* data() { return _data.data(); }
 		void set_size(u64 new_size)
 		{
-			ensure(new_size <= max_size, "the new size is larger than the capacity of the string");
+			assert(new_size <= max_size, "the new size is larger than the capacity of the string");
 			_size = new_size;
 		}
 
@@ -58,7 +58,7 @@ namespace brb
 		{
 			// make sure that the str fits into the storage
 			u64 len = strlen(str);
-			ensure(len <= max_size);
+			assert(len <= max_size);
 			_size = len;
 
 			for (mu64 i = 0; i < len; ++i)

@@ -9,10 +9,10 @@ namespace brb
 	class string;
 
 	template <u64 str_len>
-	void ensure(const bool condition, string<str_len>& msg);
-	void ensure(const bool condition, const char* msg);
+	void assert(const bool condition, string<str_len>& msg);
+	void assert(const bool condition, const char* msg);
 
-	constexpr void ensure(const bool condition)
+	constexpr void assert(const bool condition)
 	{
 		if (condition)
 			return;

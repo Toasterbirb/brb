@@ -23,13 +23,13 @@ namespace brb
 
 		constexpr T operator[](u64 index) const
 		{
-			ensure(index < _size, "index out-of-bounds");
+			assert(index < _size, "index out-of-bounds");
 			return _data[index];
 		}
 
 		constexpr T& operator[](u64 index)
 		{
-			ensure(index < _size, "index out-of-bounds");
+			assert(index < _size, "index out-of-bounds");
 			return _data[index];
 		}
 
