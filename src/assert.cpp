@@ -1,5 +1,6 @@
 #include "assert.hpp"
 #include "print.hpp"
+#include "string.hpp"
 
 constexpr char assertion_failed_msg[] = "assertion failed: ";
 constexpr u64 assertion_failed_msg_len = brb::strlen(assertion_failed_msg);
@@ -9,8 +10,7 @@ constexpr u64 assertion_failed_no_msg_len = brb::strlen(assertion_failed_no_msg)
 
 namespace brb
 {
-	template <u64 str_len>
-	void assert(const bool condition, string<str_len>& msg)
+	void assert(const bool condition, string& msg)
 	{
 		if (condition)
 			return;
