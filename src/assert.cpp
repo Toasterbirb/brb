@@ -10,6 +10,7 @@ constexpr u64 assertion_failed_no_msg_len = brb::strlen(assertion_failed_no_msg)
 
 namespace brb
 {
+#ifndef NDEBUG
 	void assert(const bool condition, string& msg)
 	{
 		if (condition)
@@ -37,4 +38,8 @@ namespace brb
 		syscall::kill(0, 6); // abort
 		return;
 	}
+#else
+	void assert(const bool condition, string& msg) {}
+	void assert(const bool condition, const char* msg) {}
+#endif
 }
