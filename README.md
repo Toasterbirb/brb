@@ -2,7 +2,7 @@
 
 The goal of this project is to create a C++ standard library for Linux without using any libraries (not even the C or C++ standard libraries). If everything goes as planned, there should be zero includes in this repository that refer to files outside of this repository.
 
-> **IMPORTANT**
+> **Warning**
 > There are zero, absolutely none, nada, security guarantees with this library
 
 brb is somewhat opionated and will not necessarily follow any existing standards. Some notable changes include:
