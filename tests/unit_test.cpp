@@ -111,6 +111,18 @@ void memory_tests(testing& test)
 		delete[] data_a;
 		delete[] data_b;
 	}
+	// {
+	// 	constexpr u64 ptr_count = 64;
+	// 	brb::vector<void*> pointers;
+
+	// 	for (mu64 i = 1; i < ptr_count; ++i)
+	// 		pointers.push_back(brb::malloc(i));
+
+	// 	for (mu64 i = 0; i < pointers.size(); ++i)
+	// 		brb::free(pointers[i]);
+
+	// 	test.check("heap torture", brb::allocated_block_count() == 0);
+	// }
 }
 
 void scoped_ptr_tests(testing& test)
@@ -293,6 +305,20 @@ void vector_tests(testing& test)
 
 		test.check("vector push_back() with arrays (size)", vec.size() == target_size);
 		test.check("vector push_back() with arrays (capacity)", vec.capacity() > target_size);
+	}
+	{
+		constexpr u64 target_size = 30;
+		brb::vector<mu64> vec;
+		for (mu64 i = 0; i < target_size; ++i)
+			vec.push_back(i);
+
+		vec.clear();
+		test.check("vector clear() empty", vec.size() == 0);
+
+		for (mu64 i = 0; i < target_size; ++i)
+			vec.push_back(i);
+
+		test.check("vector clear() new data", vec.size() == target_size);
 	}
 }
 

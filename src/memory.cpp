@@ -1,5 +1,6 @@
 #include "assert.hpp"
 #include "memory.hpp"
+#include "print.hpp"
 #include "syscalls.hpp"
 
 // some constants from mman.h and mman-linux.h
@@ -18,9 +19,15 @@ struct block
 	void* addr;
 	mu64 size;
 	bool used{false};
+
+	static block* get_block_ptr(void* address)
+	{
+		return static_cast<block*>(address) - sizeof(block);
+	}
+
 };
 
-constexpr u64 minimum_allocation{1024};
+constexpr u64 minimum_allocation{2048};
 static_assert(sizeof(block) + sizeof(f128) < minimum_allocation);
 
 static block blocks {nullptr, nullptr, 0, true};
@@ -30,27 +37,60 @@ static mu64 block_allocation_counter{0};
 
 namespace brb
 {
-	void split_block(block* b, u64 needed_size);
+	block* new_block(u64 size);
+	void split_block(block* b, u64 size);
 
 	mu64 allocated_block_count()
 	{
 		return block_allocation_counter;
 	}
 
-	void split_block(block* b, u64 needed_size)
+	block* new_block(u64 size)
 	{
-		block* next_block = static_cast<block*>(b->addr) + needed_size + 1;
-		b->next = next_block;
-		b->size = sizeof(block) + needed_size;
+		u64 new_block_size = size < minimum_allocation ? minimum_allocation + sizeof(block) : size + sizeof(block);
+		block* new_block = static_cast<block*>(brb::syscall::mmap(0, new_block_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
+		brb::assert(new_block != nullptr, "got a nullptr from mmap");
 
-		next_block->addr = next_block + sizeof(block);
-		next_block->next = nullptr;
-		next_block->size = b->size - needed_size - 1;
-		next_block->used = false;
+		assert(new_block_size > sizeof(block));
+		new_block->size = new_block_size - sizeof(block);
+		new_block->next = nullptr;
+		new_block->addr = new_block + sizeof(block) + 1;
+
+		return new_block;
+	}
+
+	/**
+	 * @brief Split a block into two blocks
+	 *
+	 * @param b A pointer to the block to split
+	 * @param size Amount of space to leave for the original block
+	 */
+	void split_block(block* b, u64 size)
+	{
+		assert(size != 0, "splitting a block into an empty one is not allowed");
+
+		u64 block_offset = size + sizeof(block) + 1;
+
+		block* new_block = reinterpret_cast<block*>(reinterpret_cast<mu64*>(b) + block_offset);
+		assert(new_block + sizeof(block) + 1 < b + b->size + 1, "new block is out-of-bounds");
+
+		new_block->used = false;
+		new_block->addr = new_block + sizeof(block) + 1;
+		new_block->next = nullptr;
+
+		assert(b->size > block_offset);
+		new_block->size = b->size - block_offset;
+		assert(new_block->size > 0, "the new split block is empty");
+
+		b->size = size;
+		b->next = new_block;
 	}
 
 	void* malloc(u64 size)
 	{
+		if (size == 0)
+			return nullptr;
+
 		// go through the memory blocks and attempt to find a fitting block
 
 		block* b = &blocks;
@@ -61,35 +101,16 @@ namespace brb
 
 		if (b->used)
 		{
-			u64 needed_block_size = size + sizeof(block);
-			u64 new_block_size = size < minimum_allocation ? minimum_allocation : size + sizeof(block);
-			block* new_block = static_cast<block*>(brb::syscall::mmap(0, new_block_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
-			brb::assert(new_block != nullptr, "got a nullptr from mmap");
-
-			// create a link between the last block and the new block
-			b->next = new_block;
-
-			// calculate the address where the data should go to
-			new_block->addr = new_block + sizeof(block);
-
-			// set the rest of the variables
-			new_block->size = new_block_size;
-			new_block->used = true;
-			new_block->next = nullptr;
-
-			// move into the new block
-			b = new_block;
-
-			// create a new unused block after this current one if there's more space left that's unused
-			if (needed_block_size < new_block_size)
-				split_block(new_block, needed_block_size);
+			print("new block allocated\n");
+			block* new_b = new_block(size);
+			b->next = new_b;
+			b = new_b;
 		}
 
 		// split the block if possible
-		if (b->size > size + sizeof(block))
-			split_block(b, size + sizeof(block));
+		if (b->size + sizeof(block) > (size + sizeof(block) + 1) * 4)
+			split_block(b, size);
 
-		// mark the block as used
 		b->used = true;
 
 		brb::assert(b->size != 0, "empty memory block");
@@ -102,7 +123,7 @@ namespace brb
 
 	void free(void* addr)
 	{
-		block* b = static_cast<block*>(addr);
+		block* b = block::get_block_ptr(addr);
 		b->used = false;
 		--block_allocation_counter;
 	}
