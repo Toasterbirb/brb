@@ -1,6 +1,7 @@
 #pragma once
 
 #include "assert.hpp"
+#include "memory.hpp"
 #include "types.hpp"
 
 namespace brb
@@ -31,6 +32,12 @@ namespace brb
 		{
 			assert(index < _size, "index out-of-bounds");
 			return _data[index];
+		}
+
+		constexpr void operator=(const array& other)
+		{
+			assert(other._size == _size, "tried to assign an array with a non-matching size");
+			memcpy(other._data, _data, other._size * sizeof(T));
 		}
 
 		constexpr bool operator==(const array& other) const

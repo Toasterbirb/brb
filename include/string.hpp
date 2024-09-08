@@ -3,6 +3,7 @@
 #include "assert.hpp"
 #include "memory.hpp"
 #include "types.hpp"
+#include "vector.hpp"
 
 namespace brb
 {
@@ -19,92 +20,66 @@ namespace brb
 	class string
 	{
 	public:
-		constexpr string() {};
+		string() {};
 		string(const char* const str)
 		{
-			_size = strlen(str);
-			capacity = _size;
-			_data = new char[_size];
+			u64 size = strlen(str);
+			_data.resize(size);
 
-			for (mu64 i = 0; i < _size; ++i)
+			for (mu64 i = 0; i < size; ++i)
 				_data[i] = str[i];
 		}
 
 		string(const char c, u64 size)
 		{
-			_size = size;
-			capacity = size;
-			_data = new char[size];
+			_data.resize(size);
 
-			fill<char>(_data, size, c);
+			fill<char>(_data.data(), size, c);
 		}
 
-		~string()
-		{
-			delete[] _data;
-		}
-
-		constexpr mu64 size() const { return _size; }
-		constexpr bool empty() const { return _size == 0; }
-
-		char* data() { return _data; }
-
-		constexpr void clear() { _size = 0; }
+		constexpr mu64 size() const { return _data.size(); }
+		constexpr bool empty() const { return _data.empty(); }
+		char* data() { return _data.data(); }
+		constexpr void clear() { _data.clear(); }
+		void push_back(const char c) { _data.push_back(c); }
+		void pop_back() { _data.pop_back(); }
 
 		char operator[](u64 index) const
 		{
-			assert(index < _size, "out-of-bounds string access");
+			assert(index < _data.size(), "out-of-bounds string access");
 			return _data[index];
 		}
 
 		char& operator[](u64 index)
 		{
-			assert(index < _size, "out-of-bounds string access");
+			assert(index < _data.size(), "out-of-bounds string access");
 			return _data[index];
 		}
 
 		void operator=(const char* const str)
 		{
-			_size = strlen(str);
-
-			// if the new size is still within the capacity, don't resize the buffer
-			if (_size > capacity)
-			{
-				delete[] _data;
-				_data = new char[_size];
-			}
-
-			for (mu64 i = 0; i < _size; ++i)
-				_data[i] = str[i];
+			u64 len = strlen(str);
+			_data.resize(len);
+			memcpy(str, _data.data(), len * sizeof(char));
 		}
 
 		bool operator==(const string& other) const
 		{
-			if (_size != other._size)
+			if (_data.size() != other.size())
 				return false;
 
-			for (mu64 i = 0; i < _size; ++i)
-				if (_data[i] != other._data[i])
-					return false;
-
-			return true;
+			return _data == other._data;
 		}
 
 		bool operator!=(const string& other) const
 		{
-			if (_size != other._size)
+			if (_data.size() != other.size())
 				return true;
 
-			for (mu64 i = 0; i < _size; ++i)
-				if (_data[i] != other._data[i])
-					return true;
-
-			return false;
+			return _data != other._data;
 		}
 
 	private:
-		mu64 capacity{0};
-		mu64 _size{0};
-		char* _data{nullptr};
+		brb::vector<char> _data;
 	};
 }

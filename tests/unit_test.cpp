@@ -194,6 +194,13 @@ void string_tests(testing& test)
 		test.check("string creation with set amount of repeating chars (str)", s == "----");
 		test.check("string creation with set amount of repeating chars (size)", s.size() == 4);
 	}
+	{
+		string s = "asd";
+		s.push_back('f');
+		test.check("string push_back()", s == "asdf");
+		s.pop_back();
+		test.check("string pop_back()", s == "asd");
+	}
 }
 
 void math_tests(testing& test)
@@ -259,6 +266,29 @@ void vector_tests(testing& test)
 		test.check("vector pop_back() (data [0])", vec[0] == 1);
 		test.check("vector pop_back() (data [1])", vec[1] == 2);
 	}
+	{
+		brb::vector<mu64> vec;
+		vec.resize(12);
+		vec[10] = 2;
+
+		test.check("vector resizing (size)", vec.size() == 12);
+		test.check("vector resizing (capacity)", vec.capacity() == 12);
+		test.check("vector resizing (data)", vec[10] == 2);
+	}
+	// {
+	// 	constexpr u64 target_size = 64;
+	// 	brb::vector<brb::array<mu64, 64>> vec;
+	// 	test.check("vector push_back() with arrays (empty)", vec.empty());
+
+	// 	for (mu64 i = 0; i < target_size; ++i)
+	// 	{
+	// 		brb::array<mu64, 64> arr;
+	// 		vec.push_back(arr);
+	// 	}
+
+	// 	test.check("vector push_back() with arrays (size)", vec.size() == target_size);
+	// 	test.check("vector push_back() with arrays (capacity)", vec.capacity() > target_size);
+	// }
 }
 
 mu8 brb_main()

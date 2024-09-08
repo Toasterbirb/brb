@@ -16,14 +16,14 @@ namespace brb
 	}
 
 	template <typename T>
-	void memcpy(T* src, T* dst, u64 size)
+	void memcpy(const T* src, T* dst, u64 size)
 	{
 		for (mu64 i = 0; i < size; ++i)
 			dst[i] = src[i];
 	}
 
 	template <typename T>
-	bool memcmp(T* a, T* b, u64 size)
+	bool memcmp(const T* a, const T* b, u64 size)
 	{
 		for (mu64 i = 0; i < size; ++i)
 			if (a[i] != b[i])
