@@ -1,5 +1,5 @@
 playground
 unit_test
 unit_test_optimized
-*.data
+*.data*
 *.out.*
