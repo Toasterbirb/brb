@@ -1,7 +1,6 @@
 #pragma once
 
 #include "process.hpp"
-#include "syscalls.hpp"
 
 namespace brb
 {
