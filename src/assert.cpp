@@ -21,8 +21,7 @@ namespace brb
 		print(msg);
 		print("\n", 1);
 
-		syscall::kill(0, 6); // abort
-		return;
+		abort();
 	}
 
 	void assert(const bool condition, const char* msg)
@@ -35,8 +34,7 @@ namespace brb
 		print(msg, strlen(msg));
 		print("\n", 1);
 
-		syscall::kill(0, 6); // abort
-		return;
+		abort();
 	}
 #else
 	void assert(const bool condition, string& msg) {}

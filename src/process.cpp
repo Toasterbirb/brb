@@ -15,6 +15,11 @@ void _start()
 
 namespace brb
 {
+	void abort()
+	{
+		syscall::kill(0, 6);
+	}
+
 	void exit(u8 exit_code)
 	{
 		syscall::exit(exit_code);
