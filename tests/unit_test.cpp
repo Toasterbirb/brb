@@ -5,6 +5,7 @@
 #include "scoped_ptr.hpp"
 #include "string.hpp"
 #include "testing.hpp"
+#include "vector.hpp"
 
 using namespace brb;
 
@@ -213,6 +214,53 @@ void math_tests(testing& test)
 	test.check("floor(-3.5)", floor(-3.5) == -3);
 }
 
+void vector_tests(testing& test)
+{
+	// the minimum capacity is 8 as of now
+	// pls update this if it changes
+	u64 min_vec_size = 8;
+
+	{
+		brb::vector<mi32> vec;
+		test.check("vector empty()", vec.empty());
+
+		vec.push_back(32);
+		test.check("vector with one element (size)", vec.size() == 1);
+		test.check("vector with one element (capacity)", vec.capacity() == min_vec_size);
+		test.check("vector with one element (data)", vec[0] == 32);
+		test.check("vector !empty()", !vec.empty());
+	}
+	{
+		brb::vector<mi32> vec;
+		constexpr u8 target_size = 64;
+
+		for (mu8 i = 0; i < target_size; ++i)
+			vec.push_back(i);
+
+		test.check("vector with multiple elements (size)", vec.size() == target_size);
+		test.check("vector with multiple elements (capacity)", vec.capacity() > vec.size());
+
+		// compare the data to an equivalent array
+		brb::array<mi32, target_size> arr;
+		for (mu8 i = 0; i < target_size; ++i)
+			arr[i] = i;
+
+		test.check("vector with multiple elements (data)", memcmp(vec.data(), arr.data(), target_size));
+	}
+	{
+		brb::vector<mi32> vec;
+		vec.push_back(1);
+		vec.push_back(2);
+		vec.push_back(3);
+		vec.pop_back();
+
+		test.check("vector pop_back() (size)", vec.size() == 2);
+		test.check("vector pop_back() (capacity)", vec.capacity() > vec.size());
+		test.check("vector pop_back() (data [0])", vec[0] == 1);
+		test.check("vector pop_back() (data [1])", vec[1] == 2);
+	}
+}
+
 mu8 brb_main()
 {
 	testing test;
@@ -228,6 +276,7 @@ mu8 brb_main()
 	run_test(scoped_ptr_tests);
 	run_test(string_tests);
 	run_test(math_tests);
+	run_test(vector_tests);
 
 	test.check("unit tests don't leak memory", brb::allocated_block_count() == 0);
 	return 0;
