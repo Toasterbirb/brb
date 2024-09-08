@@ -13,7 +13,7 @@ namespace brb
 #ifndef NDEBUG
 	void assert(const bool condition, string& msg)
 	{
-		if (condition)
+		if (condition) [[likely]]
 			return;
 
 		// print the message
@@ -26,7 +26,7 @@ namespace brb
 
 	void assert(const bool condition, const char* msg)
 	{
-		if (condition)
+		if (condition) [[likely]]
 			return;
 
 		// print the message

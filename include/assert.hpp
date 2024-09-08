@@ -11,7 +11,7 @@ namespace brb
 
 	constexpr void assert(const bool condition)
 	{
-		if (condition)
+		if (condition) [[likely]]
 			return;
 
 		abort();
