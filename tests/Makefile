@@ -1,14 +1,17 @@
-all: playground unit_test
+all: playground unit_test unit_test_optimized
 
-CXXFLAGS=-g -O0 -fno-stack-protector -Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -fno-exceptions -I../include
+CXXFLAGS=-fno-stack-protector -Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -nodefaultlibs -fno-exceptions -I../include
 
 playground: ./playground.cpp ../brb.a
-	g++ ${CXXFLAGS} -o $@ $^
+	g++ ${CXXFLAGS} -O0 -g -o $@ $^
 
 unit_test: ./unit_test.cpp ../brb.a
-	g++ ${CXXFLAGS} -o $@ $^
+	g++ ${CXXFLAGS} -O0 -g -o $@ $^
+
+unit_test_optimized: ./unit_test.cpp ../brb.a
+	g++ ${CXXFLAGS} -DNDEBUG -O1 -o $@ $^
 
 clean:
-	rm ./playground ./unit_test
+	rm -f ./playground ./unit_test ./unit_test_optimized
 
 .PHONY: clean

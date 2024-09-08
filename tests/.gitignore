@@ -1,2 +1,4 @@
 playground
 unit_test
+unit_test_optimized
+*.out.*
