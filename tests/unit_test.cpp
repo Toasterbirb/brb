@@ -275,20 +275,20 @@ void vector_tests(testing& test)
 		test.check("vector resizing (capacity)", vec.capacity() == 12);
 		test.check("vector resizing (data)", vec[10] == 2);
 	}
-	// {
-	// 	constexpr u64 target_size = 64;
-	// 	brb::vector<brb::array<mu64, 64>> vec;
-	// 	test.check("vector push_back() with arrays (empty)", vec.empty());
+	{
+		constexpr u64 target_size = 64;
+		brb::vector<brb::array<mu64, 64>> vec;
+		test.check("vector push_back() with arrays (empty)", vec.empty());
 
-	// 	for (mu64 i = 0; i < target_size; ++i)
-	// 	{
-	// 		brb::array<mu64, 64> arr;
-	// 		vec.push_back(arr);
-	// 	}
+		for (mu64 i = 0; i < target_size; ++i)
+		{
+			brb::array<mu64, 64> arr;
+			vec.push_back(arr);
+		}
 
-	// 	test.check("vector push_back() with arrays (size)", vec.size() == target_size);
-	// 	test.check("vector push_back() with arrays (capacity)", vec.capacity() > target_size);
-	// }
+		test.check("vector push_back() with arrays (size)", vec.size() == target_size);
+		test.check("vector push_back() with arrays (capacity)", vec.capacity() > target_size);
+	}
 }
 
 mu8 brb_main()

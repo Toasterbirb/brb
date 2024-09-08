@@ -37,7 +37,7 @@ namespace brb
 		constexpr void operator=(const array& other)
 		{
 			assert(other._size == _size, "tried to assign an array with a non-matching size");
-			memcpy(other._data, _data, other._size * sizeof(T));
+			memcpy(other._data, _data, other._size);
 		}
 
 		constexpr bool operator==(const array& other) const

@@ -60,7 +60,7 @@ namespace brb
 		{
 			u64 len = strlen(str);
 			_data.resize(len);
-			memcpy(str, _data.data(), len * sizeof(char));
+			memcpy(str, _data.data(), len);
 		}
 
 		bool operator==(const string& other) const

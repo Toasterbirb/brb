@@ -16,9 +16,9 @@ namespace brb
 	}
 
 	template <typename T>
-	void memcpy(const T* src, T* dst, u64 size)
+	void memcpy(const T* src, T* dst, u64 element_count)
 	{
-		for (mu64 i = 0; i < size; ++i)
+		for (mu64 i = 0; i < element_count; ++i)
 			dst[i] = src[i];
 	}
 

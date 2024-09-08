@@ -39,7 +39,7 @@ namespace brb
 				// the vector was empty before this point
 				if (_size - 1 > 0)
 				{
-					memcpy(_data, new_data, _size * sizeof(T));
+					memcpy(_data, new_data, _size);
 					delete[] _data;
 				}
 
@@ -67,7 +67,7 @@ namespace brb
 
 			T* new_data = new T[element_count * sizeof(T)];
 
-			memcpy(_data, new_data, elements_to_copy * sizeof(T));
+			memcpy(_data, new_data, elements_to_copy);
 			delete[] _data;
 			_data = new_data;
 		}
@@ -84,7 +84,7 @@ namespace brb
 			T* new_data = new T[element_count * sizeof(T)];
 
 			// copy the data over and delete the old block of memory
-			memcpy(_data, new_data, _size * sizeof(T));
+			memcpy(_data, new_data, _size);
 			delete[] _data;
 			_data = new_data;
 		}
@@ -106,7 +106,7 @@ namespace brb
 			if (other._size > _size)
 				resize(other._size);
 
-			memcpy(other._data, _data, other._size * sizeof(T));
+			memcpy(other._data, _data, other._size);
 		}
 
 		bool operator==(const vector<T>& other) const
