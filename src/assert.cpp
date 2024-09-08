@@ -20,7 +20,7 @@ namespace brb
 		print(msg);
 		print("\n", 1);
 
-		exit(-1);
+		syscall::kill(0, 6); // abort
 		return;
 	}
 
@@ -34,7 +34,7 @@ namespace brb
 		print(msg, strlen(msg));
 		print("\n", 1);
 
-		exit(-1);
+		syscall::kill(0, 6); // abort
 		return;
 	}
 }

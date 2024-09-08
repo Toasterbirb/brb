@@ -10,5 +10,6 @@ namespace brb
 		void write(const char* str, u64 len);
 		void exit(const u8 exit_code);
 		void* mmap(u64 address, u64 len, u64 prot, u64 flags, u64 fd, u64 off);
+		void kill(i64 pid, i32 sig);
 	}
 }

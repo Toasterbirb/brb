@@ -1,6 +1,6 @@
 #pragma once
 
-#include "process.hpp"
+#include "syscalls.hpp"
 
 namespace brb
 {
@@ -14,6 +14,6 @@ namespace brb
 		if (condition)
 			return;
 
-		exit(-2);
+		syscall::kill(0, 6); // abort
 	}
 }

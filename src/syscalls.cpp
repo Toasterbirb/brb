@@ -80,5 +80,21 @@ namespace brb
 
 			return ret_addr;
 		}
+
+		void kill(i64 pid, i32 sig)
+		{
+			asm volatile (R"(
+				.global kill
+					kill:
+						mov $62, %%rax
+						mov %[pid], %%rdi
+						mov %[sig], %%rsi
+						syscall
+				)"
+				:
+				: [pid] "m" (pid), [sig] "m" (sig)
+				: "rax", "rdi", "rsi"
+			);
+		}
 	}
 }
