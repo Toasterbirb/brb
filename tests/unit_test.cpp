@@ -201,6 +201,11 @@ void string_tests(testing& test)
 		s.pop_back();
 		test.check("string pop_back()", s == "asd");
 	}
+	{
+		string s = "hello";
+		s += "_world";
+		test.check("string += char*", s == "hello_world");
+	}
 }
 
 void math_tests(testing& test)

@@ -27,7 +27,7 @@ namespace brb
 			++_size;
 
 			// resize the vector if the size goes over the capacity
-			if (_size > _capacity)
+			if (_size > _capacity) [[unlikely]]
 			{
 				// if the vector is empty, resize to the minimum size
 				// otherwise multiply the capacity by the growth factor
