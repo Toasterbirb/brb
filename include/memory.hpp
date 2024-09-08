@@ -7,6 +7,30 @@ namespace brb
 	mu64 allocated_block_count();
 	void* malloc(u64 size);
 	void free(void* addr);
+
+	template <typename T>
+	void fill(T* addr, u64 size, const T value)
+	{
+		for (mu64 i = 0; i < size; ++i)
+			addr[i] = value;
+	}
+
+	template <typename T>
+	void memcpy(T* src, T* dst, u64 size)
+	{
+		for (mu64 i = 0; i < size; ++i)
+			dst[i] = src[i];
+	}
+
+	template <typename T>
+	bool memcmp(T* a, T* b, u64 size)
+	{
+		for (mu64 i = 0; i < size; ++i)
+			if (a[i] != b[i])
+				return false;
+
+		return true;
+	}
 }
 
 void* operator new(u64 size);

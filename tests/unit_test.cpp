@@ -1,5 +1,6 @@
 #include "array.hpp"
 #include "memory.hpp"
+#include "print.hpp"
 #include "string.hpp"
 #include "testing.hpp"
 
@@ -64,6 +65,49 @@ void memory_tests(testing& test)
 		test.check("new operator with unsigned 32bit integer (value assignment [3])", value_array[3] == 3);
 		delete[] value_array;
 	}
+	{
+		constexpr u64 data_size = 32;
+		constexpr mu16 value = 3;
+
+		mu16* data = new mu16[data_size];
+		fill(data, data_size, value);
+
+		bool all_values_match = true;
+		for (mu64 i = 0; i < data_size; ++i)
+		{
+			if (data[i] != value)
+			{
+				all_values_match = false;
+				break;
+			}
+		}
+		test.check("fill()", all_values_match);
+
+		delete[] data;
+	}
+	{
+		constexpr u64 data_size = 16;
+		mu16* data_a = new mu16[data_size];
+		mu16* data_b = new mu16[data_size];
+
+		fill<mu16>(data_a, data_size, 42);
+		memcpy(data_a, data_b, data_size);
+		test.check("memcpy() and memcmp() (matching)", memcmp(data_a, data_b, data_size));
+
+		delete[] data_a;
+		delete[] data_b;
+	}
+	{
+		constexpr u64 data_size = 16;
+		mu16* data_a = new mu16[data_size];
+		mu16* data_b = new mu16[data_size];
+
+		fill<mu16>(data_a, data_size, data_size);
+		test.check("memcpy() and memcmp() (not matching)", !memcmp(data_a, data_b, data_size));
+
+		delete[] data_a;
+		delete[] data_b;
+	}
 }
 
 void string_tests(testing& test)
@@ -122,6 +166,11 @@ void string_tests(testing& test)
 		s.clear();
 		test.check("string clearing (str)", s == "");
 		test.check("string clearing (size)", s.size() == 0);
+	}
+	{
+		string s('-', 4);
+		test.check("string creation with set amount of repeating chars (str)", s == "----");
+		test.check("string creation with set amount of repeating chars (size)", s.size() == 4);
 	}
 }
 

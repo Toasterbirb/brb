@@ -1,6 +1,7 @@
 #pragma once
 
 #include "assert.hpp"
+#include "memory.hpp"
 #include "types.hpp"
 
 namespace brb
@@ -27,6 +28,15 @@ namespace brb
 
 			for (mu64 i = 0; i < _size; ++i)
 				_data[i] = str[i];
+		}
+
+		string(const char c, u64 size)
+		{
+			_size = size;
+			capacity = size;
+			_data = new char[size];
+
+			fill<char>(_data, size, c);
 		}
 
 		~string()
