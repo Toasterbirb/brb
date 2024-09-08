@@ -1,6 +1,7 @@
 #include "array.hpp"
 #include "memory.hpp"
 #include "print.hpp"
+#include "scoped_ptr.hpp"
 #include "string.hpp"
 #include "testing.hpp"
 
@@ -110,6 +111,25 @@ void memory_tests(testing& test)
 	}
 }
 
+void scoped_ptr_tests(testing& test)
+{
+	{
+		scoped_ptr<mi32> ptr;
+		*ptr.get() = 1234;
+		test.check("default initialized scoped_ptr", *ptr.get() == 1234);
+	}
+	{
+		scoped_ptr<mi32> ptr = make_scoped(64);
+		test.check("scoped_ptr initialized with make_scoped()", *ptr.get() == 64);
+	}
+	{
+		constexpr u8 data_size = 4;
+		scoped_ptr<mi32> ptr = make_scoped<mi32, data_size>();
+		fill(ptr.get(), data_size, 42);
+		test.check("scoped_ptr array initialized with make_scoped()", ptr.get()[3] == 42);
+	}
+}
+
 void string_tests(testing& test)
 {
 	{
@@ -186,6 +206,7 @@ mu8 brb_main()
 
 	run_test(array_tests);
 	run_test(memory_tests);
+	run_test(scoped_ptr_tests);
 	run_test(string_tests);
 
 	test.check("unit tests don't leak memory", brb::allocated_block_count() == 0);
