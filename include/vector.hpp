@@ -32,7 +32,7 @@ namespace brb
 				// otherwise multiply the capacity by the growth factor
 				_capacity = _capacity == 0 ? minimum_size : _capacity * growth_factor;
 
-				T* new_data = new T[_capacity];
+				T* new_data = new T[_capacity * sizeof(T)];
 
 				// there's no need to copy data or delete any old data if
 				// the vector was empty before this point
