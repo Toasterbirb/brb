@@ -203,6 +203,10 @@ void math_tests(testing& test)
 	test.check("pow(2, 1)", pow(2, 1) == 2);
 	test.check("pow(2, 2)", pow(2, 2) == 4);
 	test.check("pow(2, 3)", pow(2, 3) == 8);
+	test.check("pow(2, -2)", pow(2, -2) == 0.25);
+	test.check("pow(0, 0)", pow(0, 0) == 1);
+	test.check("pow(0, 1)", pow(0, 1) == 0);
+	test.check("pow(0, 2)", pow(0, 2) == 0);
 	test.check("floor(2.5)", floor(2.5) == 2);
 	test.check("floor(2.9)", floor(2.9) == 2);
 	test.check("floor(3.0)", floor(3.0) == 3);

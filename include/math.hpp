@@ -11,14 +11,24 @@ namespace brb
 	}
 
 	template <typename T>
-	T pow(T x, u64 power)
+	mf64 pow(T x, i64 power)
 	{
 		// a very naive implementation
 		// pls optimize with some assembly magic
 
-		T result{1};
-		for (mu64 i = 0; i < power; ++i)
-			result *= x;
+		mf64 result{1};
+
+		if (power >= 0)
+		{
+			for (mu64 i = 0; i < power; ++i)
+				result *= x;
+		}
+		else
+		{
+			f64 reverse_divisor = 1.0 / x;
+			for (mi64 i = 0; i > power; --i)
+				result *= reverse_divisor;
+		}
 
 		return result;
 	}
