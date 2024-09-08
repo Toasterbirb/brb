@@ -9,9 +9,9 @@ namespace brb
 	void free(void* addr);
 
 	template <typename T>
-	void fill(T* addr, u64 size, const T value)
+	void fill(T* addr, u64 element_count, const T value)
 	{
-		for (mu64 i = 0; i < size; ++i)
+		for (mu64 i = 0; i < element_count; ++i)
 			addr[i] = value;
 	}
 
