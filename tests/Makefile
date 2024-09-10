@@ -1,6 +1,7 @@
 all: playground unit_test unit_test_optimized
 
-CXXFLAGS=-fno-stack-protector -Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -nodefaultlibs -fno-exceptions -I../include
+CXXFLAGS=-Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -nodefaultlibs -fno-exceptions -I../include
+#-fno-stack-protector  # add this back in if things break
 
 playground: ./playground.cpp ../brb.a
 	g++ ${CXXFLAGS} -O0 -g -o $@ $^
