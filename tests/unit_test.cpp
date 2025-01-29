@@ -111,18 +111,18 @@ void memory_tests(testing& test)
 		delete[] data_a;
 		delete[] data_b;
 	}
-	// {
-	// 	constexpr u64 ptr_count = 64;
-	// 	brb::vector<void*> pointers;
+	{
+		constexpr u64 ptr_count = 64;
+		brb::vector<void*> pointers;
 
-	// 	for (mu64 i = 1; i < ptr_count; ++i)
-	// 		pointers.push_back(brb::malloc(i));
+		for (u64 i = 1; i < ptr_count; ++i)
+			pointers.push_back(brb::malloc(i));
 
-	// 	for (mu64 i = 0; i < pointers.size(); ++i)
-	// 		brb::free(pointers[i]);
+		for (u64 i = 0; i < pointers.size(); ++i)
+			brb::free(pointers[i]);
 
-	// 	test.check("heap torture", brb::allocated_block_count() == 0);
-	// }
+		test.check("heap torture", brb::allocated_block_count() == 0);
+	}
 }
 
 void scoped_ptr_tests(testing& test)
