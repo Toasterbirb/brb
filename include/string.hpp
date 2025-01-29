@@ -82,6 +82,15 @@ namespace brb
 			return _data == other._data;
 		}
 
+		bool operator==(const char* const str) const
+		{
+			const u64 len = strlen(str);
+			if (_data.size() != len)
+				return false;
+
+			return memcmp(_data.data(), str, len);
+		}
+
 		bool operator!=(const string& other) const
 		{
 			if (_data.size() != other.size())

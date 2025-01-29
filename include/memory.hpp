@@ -4,7 +4,7 @@
 
 namespace brb
 {
-	u64 allocated_block_count();
+	i64 allocated_block_count();
 	void* malloc(const u64 size);
 	void free(void* addr);
 
