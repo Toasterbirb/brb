@@ -12,13 +12,13 @@ using namespace brb;
 void array_tests(testing& test)
 {
 	{
-		brb::array<mu32, 4> arr;
+		brb::array<u32, 4> arr;
 		arr.fill(5);
 
 		test.check("array size()", arr.size() == 4);
 
 		bool array_is_filled{true};
-		for (mu8 i = 0; i < 4; ++i)
+		for (u8 i = 0; i < 4; ++i)
 		{
 			if (arr[i] != 5)
 			{
@@ -32,9 +32,9 @@ void array_tests(testing& test)
 		test.check("array value assignment operator", arr[2] == 4);
 	}
 	{
-		brb::array<mu32, 16> arr_a;
-		brb::array<mu32, 16> arr_b;
-		brb::array<mu32, 16> arr_c;
+		brb::array<u32, 16> arr_a;
+		brb::array<u32, 16> arr_b;
+		brb::array<u32, 16> arr_c;
 
 		arr_a.fill(5);
 		arr_b.fill(5);
@@ -50,7 +50,7 @@ void array_tests(testing& test)
 void memory_tests(testing& test)
 {
 	{
-		mu32* value = new mu32;
+		u32* value = new u32;
 		*value = 5;
 		test.check("new operator with unsigned 32bit integer (is not null)", value != nullptr);
 		test.check("new operator with unsigned 32bit integer (value assignment)", *value = 5);
@@ -58,10 +58,10 @@ void memory_tests(testing& test)
 	}
 	{
 		constexpr u8 arr_size = 4;
-		mu32* value_array = new mu32[arr_size];
+		u32* value_array = new u32[arr_size];
 		test.check("new operator with unsigned 32bit integer array (is not null)", value_array != nullptr);
 
-		for (mu8 i = 0; i < arr_size; ++i)
+		for (u8 i = 0; i < arr_size; ++i)
 			value_array[i] = i;
 
 		test.check("new operator with unsigned 32bit integer (value assignment [1])", value_array[1] == 1);
@@ -70,13 +70,13 @@ void memory_tests(testing& test)
 	}
 	{
 		constexpr u64 data_size = 32;
-		constexpr mu16 value = 3;
+		constexpr u16 value = 3;
 
-		mu16* data = new mu16[data_size];
+		u16* data = new u16[data_size];
 		fill(data, data_size, value);
 
 		bool all_values_match = true;
-		for (mu64 i = 0; i < data_size; ++i)
+		for (u64 i = 0; i < data_size; ++i)
 		{
 			if (data[i] != value)
 			{
@@ -90,10 +90,10 @@ void memory_tests(testing& test)
 	}
 	{
 		constexpr u64 data_size = 16;
-		mu16* data_a = new mu16[data_size];
-		mu16* data_b = new mu16[data_size];
+		u16* data_a = new u16[data_size];
+		u16* data_b = new u16[data_size];
 
-		fill<mu16>(data_a, data_size, 42);
+		fill<u16>(data_a, data_size, 42);
 		memcpy(data_a, data_b, data_size);
 		test.check("memcpy() and memcmp() (matching)", memcmp(data_a, data_b, data_size));
 
@@ -102,10 +102,10 @@ void memory_tests(testing& test)
 	}
 	{
 		constexpr u64 data_size = 16;
-		mu16* data_a = new mu16[data_size];
-		mu16* data_b = new mu16[data_size];
+		u16* data_a = new u16[data_size];
+		u16* data_b = new u16[data_size];
 
-		fill<mu16>(data_a, data_size, data_size);
+		fill<u16>(data_a, data_size, data_size);
 		test.check("memcpy() and memcmp() (not matching)", !memcmp(data_a, data_b, data_size));
 
 		delete[] data_a;
@@ -128,17 +128,17 @@ void memory_tests(testing& test)
 void scoped_ptr_tests(testing& test)
 {
 	{
-		scoped_ptr<mi32> ptr;
+		scoped_ptr<i32> ptr;
 		*ptr.get() = 1234;
 		test.check("default initialized scoped_ptr", *ptr.get() == 1234);
 	}
 	{
-		scoped_ptr<mi32> ptr = make_scoped(64);
+		scoped_ptr<i32> ptr = make_scoped(64);
 		test.check("scoped_ptr initialized with make_scoped()", *ptr.get() == 64);
 	}
 	{
 		constexpr u8 data_size = 4;
-		scoped_ptr<mi32> ptr = make_scoped<mi32, data_size>();
+		scoped_ptr<i32> ptr = make_scoped<i32, data_size>();
 		fill(ptr.get(), data_size, 42);
 		test.check("scoped_ptr array initialized with make_scoped()", ptr.get()[3] == 42);
 	}
@@ -245,7 +245,7 @@ void vector_tests(testing& test)
 	u64 min_vec_size = 8;
 
 	{
-		brb::vector<mi32> vec;
+		brb::vector<i32> vec;
 		test.check("vector empty()", vec.empty());
 
 		vec.push_back(32);
@@ -255,24 +255,24 @@ void vector_tests(testing& test)
 		test.check("vector !empty()", !vec.empty());
 	}
 	{
-		brb::vector<mi32> vec;
+		brb::vector<i32> vec;
 		constexpr u8 target_size = 64;
 
-		for (mu8 i = 0; i < target_size; ++i)
+		for (u8 i = 0; i < target_size; ++i)
 			vec.push_back(i);
 
 		test.check("vector with multiple elements (size)", vec.size() == target_size);
 		test.check("vector with multiple elements (capacity)", vec.capacity() > vec.size());
 
 		// compare the data to an equivalent array
-		brb::array<mi32, target_size> arr;
-		for (mu8 i = 0; i < target_size; ++i)
+		brb::array<i32, target_size> arr;
+		for (u8 i = 0; i < target_size; ++i)
 			arr[i] = i;
 
 		test.check("vector with multiple elements (data)", memcmp(vec.data(), arr.data(), target_size));
 	}
 	{
-		brb::vector<mi32> vec;
+		brb::vector<i32> vec;
 		vec.push_back(1);
 		vec.push_back(2);
 		vec.push_back(3);
@@ -284,7 +284,7 @@ void vector_tests(testing& test)
 		test.check("vector pop_back() (data [1])", vec[1] == 2);
 	}
 	{
-		brb::vector<mu64> vec;
+		brb::vector<u64> vec;
 		vec.resize(12);
 		vec[10] = 2;
 
@@ -294,12 +294,12 @@ void vector_tests(testing& test)
 	}
 	{
 		constexpr u64 target_size = 64;
-		brb::vector<brb::array<mu64, 64>> vec;
+		brb::vector<brb::array<u64, 64>> vec;
 		test.check("vector push_back() with arrays (empty)", vec.empty());
 
-		for (mu64 i = 0; i < target_size; ++i)
+		for (u64 i = 0; i < target_size; ++i)
 		{
-			brb::array<mu64, 64> arr;
+			brb::array<u64, 64> arr;
 			vec.push_back(arr);
 		}
 
@@ -308,21 +308,21 @@ void vector_tests(testing& test)
 	}
 	{
 		constexpr u64 target_size = 30;
-		brb::vector<mu64> vec;
-		for (mu64 i = 0; i < target_size; ++i)
+		brb::vector<u64> vec;
+		for (u64 i = 0; i < target_size; ++i)
 			vec.push_back(i);
 
 		vec.clear();
 		test.check("vector clear() empty", vec.size() == 0);
 
-		for (mu64 i = 0; i < target_size; ++i)
+		for (u64 i = 0; i < target_size; ++i)
 			vec.push_back(i);
 
 		test.check("vector clear() new data", vec.size() == target_size);
 	}
 }
 
-mu8 brb_main()
+u8 brb_main()
 {
 	testing test;
 

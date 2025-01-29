@@ -16,13 +16,13 @@ namespace brb
 		~vector() { delete[] _data; }
 
 
-		constexpr mu64 size() const { return _size; }
+		constexpr u64 size() const { return _size; }
 		constexpr bool empty() const { return _size == 0; }
-		constexpr mu64 capacity() const { return _capacity; }
+		constexpr u64 capacity() const { return _capacity; }
 		constexpr T* data() const { return _data; }
 		constexpr void clear() { _size = 0; }
 
-		void push_back(T data)
+		void push_back(const T data)
 		{
 			++_size;
 
@@ -56,12 +56,12 @@ namespace brb
 				_size--;
 		}
 
-		void resize(u64 element_count)
+		void resize(const u64 element_count)
 		{
 			// allocate a new block of memory and only copy over
 			// data up-to the element_count
 
-			u64 elements_to_copy = _size < element_count ? _size : element_count;
+			const u64 elements_to_copy = _size < element_count ? _size : element_count;
 			_size = element_count;
 			_capacity = element_count;
 
@@ -72,7 +72,7 @@ namespace brb
 			_data = new_data;
 		}
 
-		void reserve(u64 element_count)
+		void reserve(const u64 element_count)
 		{
 			// no need to reserve more memory if the capacity
 			// is already higher than the requested new element count
@@ -89,13 +89,13 @@ namespace brb
 			_data = new_data;
 		}
 
-		T& operator[](u64 index)
+		T& operator[](const u64 index)
 		{
 			assert(index < _size, "index out-of-bounds");
 			return _data[index];
 		}
 
-		T operator[](u64 index) const
+		T operator[](const u64 index) const
 		{
 			assert(index < _size, "index out-of-bounds");
 			return _data[index];
@@ -125,13 +125,13 @@ namespace brb
 			return !memcmp(_data, other._data, _size * sizeof(T));
 		}
 
-		mf32 growth_factor{1.5};
+		f32 growth_factor{1.5};
 
 	private:
 		constexpr static u64 minimum_size{8};
 
-		mu64 _size{0};
-		mu64 _capacity{0};
+		u64 _size{0};
+		u64 _capacity{0};
 		T* _data{nullptr};
 	};
 }

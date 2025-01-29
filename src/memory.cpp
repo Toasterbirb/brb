@@ -17,7 +17,7 @@ struct block
 {
 	block* next;
 	void* addr;
-	mu64 size;
+	u64 size;
 	bool used{false};
 
 	static block* get_block_ptr(void* address)
@@ -33,21 +33,21 @@ static_assert(sizeof(block) + sizeof(f128) < minimum_allocation);
 static block blocks {nullptr, nullptr, 0, true};
 
 // keep track of allocated blocks to spot memory leakage
-static mu64 block_allocation_counter{0};
+static u64 block_allocation_counter{0};
 
 namespace brb
 {
-	block* new_block(u64 size);
-	void split_block(block* b, u64 size);
+	block* new_block(const u64 size);
+	void split_block(block* b, const u64 size);
 
-	mu64 allocated_block_count()
+	u64 allocated_block_count()
 	{
 		return block_allocation_counter;
 	}
 
-	block* new_block(u64 size)
+	block* new_block(const u64 size)
 	{
-		u64 new_block_size = size < minimum_allocation ? minimum_allocation + sizeof(block) : size + sizeof(block);
+		const u64 new_block_size = size < minimum_allocation ? minimum_allocation + sizeof(block) : size + sizeof(block);
 		block* new_block = static_cast<block*>(brb::syscall::mmap(0, new_block_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0));
 		brb::assert(new_block != nullptr, "got a nullptr from mmap");
 
@@ -65,13 +65,13 @@ namespace brb
 	 * @param b A pointer to the block to split
 	 * @param size Amount of space to leave for the original block
 	 */
-	void split_block(block* b, u64 size)
+	void split_block(block* b, const u64 size)
 	{
 		assert(size != 0, "splitting a block into an empty one is not allowed");
 
-		u64 block_offset = size + sizeof(block) + 1;
+		const u64 block_offset = size + sizeof(block) + 1;
 
-		block* new_block = reinterpret_cast<block*>(reinterpret_cast<mu64*>(b) + block_offset);
+		block* new_block = reinterpret_cast<block*>(reinterpret_cast<u64*>(b) + block_offset);
 		assert(new_block + sizeof(block) + 1 < b + b->size + 1, "new block is out-of-bounds");
 
 		new_block->used = false;
@@ -86,7 +86,7 @@ namespace brb
 		b->next = new_block;
 	}
 
-	void* malloc(u64 size)
+	void* malloc(const u64 size)
 	{
 		if (size == 0)
 			return nullptr;
@@ -129,12 +129,12 @@ namespace brb
 	}
 }
 
-void* operator new(u64 size)
+void* operator new(const u64 size)
 {
 	return brb::malloc(size);
 }
 
-void* operator new[](u64 size)
+void* operator new[](const u64 size)
 {
 	return brb::malloc(size);
 }
@@ -144,7 +144,7 @@ void operator delete(void* addr) noexcept
 	brb::free(addr);
 }
 
-void operator delete(void* addr, u64 size) noexcept
+void operator delete(void* addr, const u64 size) noexcept
 {
 	brb::free(addr);
 }
@@ -154,7 +154,7 @@ void operator delete[](void* addr) noexcept
 	brb::free(addr);
 }
 
-void operator delete[](void* addr, u64 size) noexcept
+void operator delete[](void* addr, const u64 size) noexcept
 {
 	brb::free(addr);
 }

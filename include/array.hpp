@@ -6,29 +6,29 @@
 
 namespace brb
 {
-	template <typename T, u64 N>
+	template <typename T, const u64 N>
 	class array
 	{
 	public:
 		constexpr array() {}
-		constexpr array(const T data[N]) { this->data = data; }
+		constexpr array(const T data[N]) { this->_data = data; }
 
-		constexpr mu64 size() const { return _size; }
+		constexpr u64 size() const { return _size; }
 		T* data() { return &_data[0]; }
 
 		constexpr void fill(const T value)
 		{
-			for (mu64 i = 0; i < _size; ++i)
+			for (u64 i = 0; i < _size; ++i)
 				_data[i] = value;
 		}
 
-		constexpr T operator[](u64 index) const
+		constexpr T operator[](const u64 index) const
 		{
 			assert(index < _size, "index out-of-bounds");
 			return _data[index];
 		}
 
-		constexpr T& operator[](u64 index)
+		constexpr T& operator[](const u64 index)
 		{
 			assert(index < _size, "index out-of-bounds");
 			return _data[index];
@@ -42,7 +42,7 @@ namespace brb
 
 		constexpr bool operator==(const array& other) const
 		{
-			for (mu64 i = 0; i < _size; ++i)
+			for (u64 i = 0; i < _size; ++i)
 				if (_data[i] != other._data[i])
 					return false;
 
@@ -51,7 +51,7 @@ namespace brb
 
 		constexpr bool operator!=(const array& other) const
 		{
-			for (mu64 i = 0; i < _size; ++i)
+			for (u64 i = 0; i < _size; ++i)
 				if (_data[i] != other._data[i])
 					return true;
 
@@ -60,6 +60,6 @@ namespace brb
 
 	private:
 		T _data[N];
-		u64 _size = N;
+		const u64 _size = N;
 	};
 }

@@ -10,8 +10,8 @@ namespace brb
 		void check(const char* test_name, const bool expression);
 
 	private:
-		mu64 pass_count{0};
-		mu64 fail_count{0};
+		u64 pass_count{0};
+		u64 fail_count{0};
 
 		void pass();
 		void fail();

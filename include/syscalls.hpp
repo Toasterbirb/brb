@@ -6,10 +6,10 @@ namespace brb
 {
 	namespace syscall
 	{
-		mu64 read(const void* buffer, u64 size);
-		void write(const char* str, u64 len);
+		u64 read(const void* buffer, const u64 size);
+		void write(const char* str, const u64 len);
 		void exit(const u8 exit_code);
-		void* mmap(u64 address, u64 len, u64 prot, u64 flags, u64 fd, u64 off);
-		void kill(i64 pid, i32 sig);
+		void* mmap(const u64 address, const u64 len, const u64 prot, const u64 flags, const u64 fd, const u64 off);
+		void kill(const i64 pid, const i32 sig);
 	}
 }

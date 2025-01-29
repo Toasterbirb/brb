@@ -5,11 +5,11 @@
 extern "C" void _start();
 
 // The "main" source file will define this as its main function
-mu8 brb_main();
+u8 brb_main();
 
 void _start()
 {
-	u8 ret = brb_main();
+	const u8 ret = brb_main();
 	brb::exit(ret);
 }
 

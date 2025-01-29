@@ -5,5 +5,5 @@
 namespace brb
 {
 	void abort();
-	void exit(u8 exit_code);
+	void exit(const u8 exit_code);
 }

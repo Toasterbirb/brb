@@ -4,9 +4,9 @@ namespace brb
 {
 	namespace syscall
 	{
-		mu64 read(const void* buffer, u64 size)
+		u64 read(const void* buffer, const u64 size)
 		{
-			mu64 bytes_read{0};
+			u64 bytes_read{0};
 
 			asm volatile (R"(
 				.global read
@@ -27,7 +27,7 @@ namespace brb
 			return bytes_read;
 		}
 
-		void write(const char* str, u64 len)
+		void write(const char* str, const u64 len)
 		{
 			asm volatile (R"(
 				.global write
@@ -55,7 +55,7 @@ namespace brb
 			)");
 		}
 
-		void* mmap(u64 address, u64 len, u64 prot, u64 flags, u64 fd, u64 off)
+		void* mmap(const u64 address, const u64 len, const u64 prot, const u64 flags, const u64 fd, const u64 off)
 		{
 			void* ret_addr{nullptr};
 
@@ -81,7 +81,7 @@ namespace brb
 			return ret_addr;
 		}
 
-		void kill(i64 pid, i32 sig)
+		void kill(const i64 pid, const i32 sig)
 		{
 			asm volatile (R"(
 				.global kill
