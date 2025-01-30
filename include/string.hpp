@@ -44,6 +44,8 @@ namespace brb
 		void push_back(const char c) { _data.push_back(c); }
 		void pop_back() { _data.pop_back(); }
 
+		u64 find(const char c);
+
 		char operator[](const u64 index) const
 		{
 			assert(index < _data.size(), "out-of-bounds string access");
@@ -98,6 +100,8 @@ namespace brb
 
 			return _data != other._data;
 		}
+
+		static constexpr u64 npos = -1;
 
 	private:
 		brb::vector<char> _data;

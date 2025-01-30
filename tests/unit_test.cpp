@@ -221,6 +221,16 @@ void string_tests(testing& test)
 		s += "_world";
 		test.check("string += char*", s == "hello_world");
 	}
+	{
+		string s = "hello";
+		u64 pos = s.find('l');
+		test.check("string find char (char in string)", pos == 2);
+	}
+	{
+		string s = "hello";
+		u64 pos = s.find('z');
+		test.check("string find char (char not in string)", pos == brb::string::npos);
+	}
 }
 
 void math_tests(testing& test)
