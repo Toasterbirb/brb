@@ -66,14 +66,13 @@ namespace brb
 					mov %[filename], %%rdi
 					mov %[flags], %%rsi
 					mov %[mode], %%rdx
-					mov $0, %%r10
 					syscall
 
 					mov %%rax, %[ret_value]
 			)"
 			:
 			: [filename] "m" (filename), [flags] "m" (flags), [mode] "m" (mode), [ret_value] "m" (ret_value)
-			: "rax", "rdi", "rsi", "rdx", "r10");
+			: "rax", "rdi", "rsi", "rdx");
 
 			return ret_value;
 		}
