@@ -96,5 +96,27 @@ namespace brb
 				: "rax", "rdi", "rsi"
 			);
 		}
+
+		u64 execve(const char* filename, const char* const argv[], const char* const envp[])
+		{
+			u64 exec_ret{0};
+
+			asm volatile (R"(
+			.global execve
+				execve:
+					mov $59, %%rax
+					mov %[filename], %%rdi
+					mov %[argv], %%rsi
+					mov %[envp], %%rdx
+					syscall
+
+					mov %%rax, %[exec_ret]
+			)"
+			:
+			: [filename] "m" (filename), [argv] "m" (argv), [envp] "m" (envp), [exec_ret] "m" (exec_ret)
+			: "rax", "rdi", "rsi", "rdx");
+
+			return exec_ret;
+		}
 	}
 }
