@@ -155,7 +155,7 @@ namespace brb
 			)"
 			:
 			: [pid] "m" (pid)
-			: "rax", "rdi", "rsi", "rdx");
+			: "rax");
 
 			return pid;
 		}
@@ -174,7 +174,7 @@ namespace brb
 			)"
 			:
 			: [pid] "m" (pid), [stat_addr] "m" (stat_addr), [options] "m" (options)
-			: "rax", "rdi", "rsi", "rdx");
+			: "rax", "rdi", "rsi", "rdx", "r10");
 		}
 	}
 }
