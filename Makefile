@@ -1,4 +1,4 @@
-BIN=brb.a
+BIN=brb
 PREFIX=/usr/local
 INC_DIR=./include
 
@@ -9,10 +9,13 @@ LDFLAGS=
 
 SRC_FILES := $(wildcard ./src/*.cpp)
 
-all: $(BIN)
+all: $(BIN).a $(BIN).so
 
-$(BIN): ./*.o
-	ar rvs $@ $^
+$(BIN).a: ./*.o
+	ar rvs lib$@ $^
+
+$(BIN).so: ./*.o
+	$(CXX) -shared -o lib$@ $^
 
 %.o: ./src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $(LDFLAGS) $^
@@ -26,6 +29,6 @@ uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/include/brb
 
 clean:
-	rm -f ./$(BIN) *.o
+	rm -f ./$(BIN) *.o *.a *.so
 
 .PHONY: clean

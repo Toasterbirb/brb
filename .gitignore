@@ -1,4 +1,5 @@
 brb
 *.o
 *.a
+*.so
 ./tests/brb_test
