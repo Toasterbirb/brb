@@ -12,5 +12,7 @@ namespace brb
 		void* mmap(const u64 address, const u64 len, const u64 prot, const u64 flags, const u64 fd, const u64 off);
 		void kill(const i64 pid, const i32 sig);
 		u64 execve(const char* filename, const char* const argv[], const char* const envp[]);
+		u64 fork();
+		void wait4(const u64 pid, const i32* const stat_addr, const i32 options);
 	}
 }

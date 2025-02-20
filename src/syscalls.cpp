@@ -118,5 +118,40 @@ namespace brb
 
 			return exec_ret;
 		}
+
+		u64 fork()
+		{
+			u64 pid{0};
+			asm volatile (R"(
+			.global fork
+				fork:
+					mov $57, %%rax
+					syscall
+
+					mov %%rax, %[pid]
+			)"
+			:
+			: [pid] "m" (pid)
+			: "rax", "rdi", "rsi", "rdx");
+
+			return pid;
+		}
+
+		void wait4(const u64 pid, const i32* const stat_addr, const i32 options)
+		{
+			asm volatile (R"(
+			.global wait4
+				wait4:
+					mov $61, %%rax
+					mov %[pid], %%rdi
+					mov %[stat_addr], %%rsi
+					mov %[options], %%rdx
+					mov $0, %%r10
+					syscall
+			)"
+			:
+			: [pid] "m" (pid), [stat_addr] "m" (stat_addr), [options] "m" (options)
+			: "rax", "rdi", "rsi", "rdx");
+		}
 	}
 }
