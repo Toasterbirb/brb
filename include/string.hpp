@@ -69,6 +69,16 @@ namespace brb
 			return *this;
 		}
 
+		string& operator+=(const string& str)
+		{
+			_data.reserve(_data.size() + str.size());
+
+			for (u64 i = 0; i < str.size(); ++i)
+				_data.push_back(str[i]);
+
+			return *this;
+		}
+
 		void operator=(const char* const str)
 		{
 			const u64 len = strlen(str);
