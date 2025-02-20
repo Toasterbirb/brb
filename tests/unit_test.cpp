@@ -177,6 +177,10 @@ void string_tests(testing& test)
 		test.check("check if a non-empty string is not empty", !s.empty());
 	}
 	{
+		string s = "exit";
+		test.check("string length", s.size() == 4);
+	}
+	{
 		string s = "hello";
 		s[1] = 'a';
 		test.check("string modification (str)", s == "hallo");
