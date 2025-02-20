@@ -55,6 +55,29 @@ namespace brb
 			)");
 		}
 
+		u64 open(const char* const filename, const i32 flags, const i32 mode)
+		{
+			u64 ret_value{0};
+
+			asm volatile (R"(
+			.global open
+				open:
+					mov $2, %%rax
+					mov %[filename], %%rdi
+					mov %[flags], %%rsi
+					mov %[mode], %%rdx
+					mov $0, %%r10
+					syscall
+
+					mov %%rax, %[ret_value]
+			)"
+			:
+			: [filename] "m" (filename), [flags] "m" (flags), [mode] "m" (mode), [ret_value] "m" (ret_value)
+			: "rax", "rdi", "rsi", "rdx", "r10");
+
+			return ret_value;
+		}
+
 		void* mmap(const u64 address, const u64 len, const u64 prot, const u64 flags, const u64 fd, const u64 off)
 		{
 			void* ret_addr{nullptr};
