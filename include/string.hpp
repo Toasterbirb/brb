@@ -21,34 +21,10 @@ namespace brb
 	{
 	public:
 		string() {};
-		string(const char* const str)
-		{
-			const u64 size = strlen(str);
-			_data.resize(size);
-
-			for (u64 i = 0; i < size; ++i)
-				_data[i] = str[i];
-		}
-
-		string(const char c, const u64 size)
-		{
-			_data.resize(size);
-
-			fill<char>(_data.data(), size, c);
-		}
-
-		string(string& str)
-		{
-			_data.resize(str.size());
-			memcpy(str.data(), _data.data(), _data.size());
-		}
-
-		string(const string& str)
-		{
-			_data.resize(str.size());
-			for (u64 i = 0; i < str.size(); ++i)
-				_data[i] = str[i];
-		}
+		string(const char* const str);
+		string(const char c, const u64 size);
+		string(string& str);
+		string(const string& str);
 
 		constexpr u64 size() const { return _data.size(); }
 		constexpr bool empty() const { return _data.empty(); }
