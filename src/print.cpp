@@ -1,5 +1,4 @@
 #include "print.hpp"
-#include "string.hpp"
 #include "syscalls.hpp"
 
 namespace brb
