@@ -38,4 +38,15 @@ namespace brb
 	{
 		return static_cast<i64>(x);
 	}
+
+	template <typename T>
+	constexpr T abs(const T x)
+	{
+		const T bitmask = x >> (sizeof(T) * 8 - 1);
+		return ((bitmask + x) ^ bitmask);
+	}
+
+	static_assert(abs(-34234) == 34234);
+	static_assert(abs(34234) == 34234);
+	static_assert(abs(0) == 0);
 }
