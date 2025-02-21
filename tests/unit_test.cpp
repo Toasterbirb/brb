@@ -236,6 +236,46 @@ void string_tests(testing& test)
 		u64 pos = s.find('z');
 		test.check("string find char (char not in string)", pos == brb::string::npos);
 	}
+	{
+		string s(-23);
+		test.check("convert integer to string (-23)", s == "-23");
+	}
+	{
+		string s(42);
+		test.check("convert integer to string (42)", s == "42");
+	}
+	{
+		string s(7896345);
+		test.check("convert integer to string (7896345)", s == "7896345");
+	}
+	{
+		string s(1234);
+		test.check("convert integer to string (1234)", s == "1234");
+	}
+	{
+		string s(2356);
+		test.check("convert integer to string (2356)", s == "2356");
+	}
+	{
+		string s(1);
+		test.check("convert integer to string (1)", s == "1");
+	}
+	{
+		string s((i64)0);
+		test.check("convert integer to string (0)", s == "0");
+	}
+	{
+		string s(-254783);
+		test.check("convert integer to string (-254783)", s == "-254783");
+	}
+	{
+		string s(-43786);
+		test.check("convert integer to string (-43786)", s == "-43786");
+	}
+	{
+		string s(238476);
+		test.check("convert integer to string (238476)", s == "238476");
+	}
 }
 
 void math_tests(testing& test)

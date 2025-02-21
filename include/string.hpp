@@ -25,6 +25,7 @@ namespace brb
 		string(const char c, const u64 size);
 		string(string& str);
 		string(const string& str);
+		string(const i64 num);
 
 		constexpr u64 size() const { return _data.size(); }
 		constexpr bool empty() const { return _data.empty(); }
