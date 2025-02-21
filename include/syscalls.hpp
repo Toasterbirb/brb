@@ -15,5 +15,9 @@ namespace brb
 		u64 execve(const char* filename, const char* const argv[], const char* const envp[]);
 		u64 fork();
 		void wait4(const u64 pid, const i32* const stat_addr, const i32 options);
+		void getcwd(char* const buffer, const u64 size);
+		void chdir(const char* path);
+		void setuid(const u64 uid);
+		u64 getuid();
 	}
 }

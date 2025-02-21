@@ -175,5 +175,67 @@ namespace brb
 			: [pid] "m" (pid), [stat_addr] "m" (stat_addr), [options] "m" (options)
 			: "rax", "rdi", "rsi", "rdx", "r10");
 		}
+
+		void getcwd(char* const buffer, const u64 size)
+		{
+			asm volatile (R"(
+			.global getcwd
+				getcwd:
+					mov $79, %%rax
+					mov %[buffer], %%rdi
+					mov %[size], %%rsi
+					syscall
+			)"
+			:
+			: [buffer] "m" (buffer), [size] "m" (size)
+			: "rax", "rdi", "rsi");
+		}
+
+		void chdir(const char* path)
+		{
+			asm volatile (R"(
+			.global chdir
+				chdir:
+					mov $80, %%rax
+					mov %[path], %%rdi
+					syscall
+			)"
+			:
+			: [path] "m" (path)
+			: "rax", "rdi");
+		}
+
+		void setuid(const u64 uid)
+		{
+			asm volatile (R"(
+			.global setuid
+				setuid:
+					mov $105, %%rax
+					mov %[uid], %%rdi
+					syscall
+			)"
+			:
+			: [uid] "m" (uid)
+			: "rax", "rdi");
+		}
+
+		u64 getuid()
+		{
+			u64 uid{0};
+
+			asm volatile (R"(
+			.global getuid
+				getuid:
+					mov $102, %%rax
+					syscall
+
+					mov %%rax, %[uid]
+			)"
+			:
+			: [uid] "m" (uid)
+			: "rax", "rdi");
+
+			return uid;
+		}
 	}
 }
