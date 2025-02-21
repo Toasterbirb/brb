@@ -7,12 +7,12 @@ namespace brb
 	void print(const char* str)
 	{
 		const u64 len = strlen(str);
-		syscall::write(str, len);
+		syscall::write(stdout, str, len);
 	}
 
 	void print(const char* str, const u64 len)
 	{
-		syscall::write(str, len);
+		syscall::write(stdout, str, len);
 	}
 
 	void print(string& str)
