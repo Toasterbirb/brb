@@ -6,8 +6,18 @@ namespace brb
 {
 	namespace syscall
 	{
+		// read from stdin
 		u64 read(const void* buffer, const u64 size);
+
+		// read from a file
+		u64 read(const u32 fd, const void* buffer, const u64 size);
+
+		// write to stdout
 		void write(const char* str, const u64 len);
+
+		// write to a file
+		void write(const u32 fd, const char* str, const u64 len);
+
 		void exit(const u8 exit_code);
 		u64 open(const char* const filename, const i32 flags, const i32 mode);
 		void* mmap(const u64 address, const u64 len, const u64 prot, const u64 flags, const u64 fd, const u64 off);

@@ -9,8 +9,8 @@ namespace brb
 			u64 bytes_read{0};
 
 			asm volatile (R"(
-				.global read
-					read:
+				.global read_stdin
+					read_stdin:
 						mov $0, %%rax
 						mov $0, %%rdi
 						mov %[buffer], %%rsi
@@ -27,11 +27,34 @@ namespace brb
 			return bytes_read;
 		}
 
+		u64 read(const u32 fd, const void* buffer, const u64 size)
+		{
+			u64 bytes_read{0};
+
+			asm volatile (R"(
+				.global read
+					read:
+						mov $0, %%rax
+						mov %[fd], %%rdi
+						mov %[buffer], %%rsi
+						mov %[size], %%rdx
+						syscall
+
+						mov %%rax, %[bytes_read]
+				)"
+				:
+				: [fd] "m" (fd), [buffer] "m" (buffer), [size] "m" (size), [bytes_read] "m" (bytes_read)
+				: "rax", "rdi", "rsi", "rdx"
+			);
+
+			return bytes_read;
+		}
+
 		void write(const char* str, const u64 len)
 		{
 			asm volatile (R"(
-				.global write
-					write:
+				.global write_stdout
+					write_stdout:
 						mov $1, %%rax
 						mov $1, %%rdi
 						mov %[str], %%rsi
@@ -40,6 +63,23 @@ namespace brb
 				)"
 				:
 				: [str] "m" (str) , [len] "m" (len)
+				: "eax", "ebx", "ecx", "edx"
+			);
+		}
+
+		void write(const u32 fd, const char* str, const u64 len)
+		{
+			asm volatile (R"(
+				.global write
+					write:
+						mov $1, %%rax
+						mov %[fd], %%rdi
+						mov %[str], %%rsi
+						mov %[len], %%rdx
+						syscall
+				)"
+				:
+				: [fd] "m" (fd), [str] "m" (str) , [len] "m" (len)
 				: "eax", "ebx", "ecx", "edx"
 			);
 		}
