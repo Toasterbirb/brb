@@ -25,7 +25,7 @@ namespace brb
 
 		if (power >= 0)
 		{
-			for (u64 i = 0; i < power; ++i)
+			for (i64 i = 0; i < power; ++i)
 				result *= x;
 		}
 		else
