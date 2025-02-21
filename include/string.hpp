@@ -59,6 +59,17 @@ namespace brb
 			return *this;
 		}
 
+		string operator+(string& str)
+		{
+			// create a new string and return that
+			string s;
+			s._data.resize(str.size() + _data.size());
+
+			memcpy(data(), s.data(), size());
+			memcpy(str.data(), s.data() + size(), str.size());
+			return s;
+		}
+
 		string& operator+=(const string& str)
 		{
 			_data.reserve(_data.size() + str.size());

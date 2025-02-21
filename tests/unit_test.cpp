@@ -276,6 +276,15 @@ void string_tests(testing& test)
 		string s(238476);
 		test.check("convert integer to string (238476)", s == "238476");
 	}
+	{
+		string a = "hello";
+		string b = " ";
+		string c = "world";
+		string result = a + b + c;
+
+		const string expected_result = "hello world";
+		test.check("string concatenation", result == expected_result);
+	}
 }
 
 void math_tests(testing& test)
