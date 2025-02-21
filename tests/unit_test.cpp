@@ -4,6 +4,7 @@
 #include "print.hpp"
 #include "scoped_ptr.hpp"
 #include "string.hpp"
+#include "syscalls.hpp"
 #include "testing.hpp"
 #include "vector.hpp"
 
@@ -339,6 +340,21 @@ void vector_tests(testing& test)
 	}
 }
 
+void file_io_tests(testing& test)
+{
+	{
+		const i64 fd = brb::syscall::open("test_file.txt", 0, 0);
+		test.check("open syscall returns a valid file descriptor", fd > 0);
+
+		brb::array<char, 128> buffer;
+		const i64 read_bytes = brb::syscall::read(fd, buffer.data(), buffer.size());
+		test.check("read bytes from a file", read_bytes > 0);
+
+		brb::string expected_result = "Hello World!";
+		test.check("confirm file contents", memcmp(buffer.data(), expected_result.data(), expected_result.size()));
+	}
+}
+
 u8 brb_main()
 {
 	testing test;
@@ -355,6 +371,7 @@ u8 brb_main()
 	run_test(string_tests);
 	run_test(math_tests);
 	run_test(vector_tests);
+	run_test(file_io_tests);
 
 	test.check("unit tests don't leak memory", brb::allocated_block_count() == 0);
 	return 0;
