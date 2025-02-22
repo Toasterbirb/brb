@@ -4,14 +4,14 @@ INC_DIR=./include
 
 CXX=g++
 WARNINGS=-pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Woverloaded-virtual -Wsign-promo -Wstrict-null-sentinel -Wundef -Werror -Wno-unused
-CXXFLAGS=-g -static --entry=__brb_start -Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -fno-exceptions -I$(INC_DIR) $(WARNINGS)
+CXXFLAGS=-g -static -z noexecstack --entry=__brb_start -Wno-builtin-declaration-mismatch -nostdlib -nostdlib++ -fno-exceptions -I$(INC_DIR) $(WARNINGS)
 LDFLAGS=
 
-SRC_FILES := $(wildcard ./src/*.cpp)
+# SRC_FILES := $(wildcard ./src/*.cpp)
 
 all: $(BIN).a $(BIN).so
 
-$(BIN).a: ./*.o
+$(BIN).a: ./*.o ./asm_src/syscall.o
 	ar rvs lib$@ $^
 
 $(BIN).so: ./*.o
@@ -19,6 +19,9 @@ $(BIN).so: ./*.o
 
 %.o: ./src/%.cpp
 	$(CXX) $(CXXFLAGS) -c $(LDFLAGS) $^
+
+asm_src/%.o: ./asm_src/%.asm
+	nasm -f elf64 -o $@ $^
 
 install:
 	cp ./$(BIN) $(DESTDIR)$(PREFIX)/lib/
@@ -29,6 +32,6 @@ uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/include/brb
 
 clean:
-	rm -f ./$(BIN) *.o *.a *.so
+	rm -f ./$(BIN) ./asm_src/*.o *.o *.a *.so
 
 .PHONY: clean
