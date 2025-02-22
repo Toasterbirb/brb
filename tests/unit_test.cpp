@@ -404,7 +404,7 @@ void file_io_tests(testing& test)
 	}
 }
 
-u8 brb_main(const brb::vector<char*>& args)
+u8 brb_main(brb::vector<char*> args)
 {
 	testing test;
 

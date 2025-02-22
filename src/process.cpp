@@ -7,7 +7,7 @@ extern "C" void _start();
 extern "C" void init(u64 argc, char* argv[]);
 
 // The "main" source file will define this as its main function
-u8 brb_main(const brb::vector<char*>& args);
+u8 brb_main(brb::vector<char*> args);
 
 void init(u64 argc, char* argv[])
 {

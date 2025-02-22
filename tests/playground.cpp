@@ -1,7 +1,7 @@
 #include "print.hpp"
 #include "string.hpp"
 
-u8 brb_main(const brb::vector<char*>& args)
+u8 brb_main(brb::vector<char*> args)
 {
 	brb::printv("argument count: ", args.size(), "\n");
 
