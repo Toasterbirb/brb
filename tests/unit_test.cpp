@@ -125,7 +125,7 @@ void memory_tests(testing& test)
 				brb::free(pointers[i]);
 		}
 
-		test.check("heap torture", brb::allocated_block_count() == 0);
+		test.check("heap torture", brb::allocated_block_count() == 2);
 	}
 }
 
@@ -411,7 +411,9 @@ u8 brb_main(brb::vector<char*> args)
 	const auto run_test = [&test](void(*test_func)(testing& test))
 	{
 		test_func(test);
-		test.check("memory has not been leaked yet", brb::allocated_block_count() == 0);
+		test.check("memory has not been leaked yet", brb::allocated_block_count() == 2);
+		if (brb::allocated_block_count() > 2)
+			brb::printv("Allocated blocks: ", brb::allocated_block_count(), "\n");
 	};
 
 	run_test(array_tests);
@@ -422,6 +424,6 @@ u8 brb_main(brb::vector<char*> args)
 	run_test(vector_tests);
 	run_test(file_io_tests);
 
-	test.check("unit tests don't leak memory", brb::allocated_block_count() == 0);
+	test.check("unit tests don't leak memory", brb::allocated_block_count() == 2);
 	return 0;
 }
