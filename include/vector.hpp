@@ -13,6 +13,18 @@ namespace brb
 		// don't reserve any space for empty vectors
 		vector() {}
 
+		vector(vector& vec)
+		{
+			resize(vec.size());
+			memcpy(vec._data, _data, _size);
+		}
+
+		vector(const vector& vec)
+		{
+			resize(vec.size());
+			memcpy(vec._data, _data, _size);
+		}
+
 		~vector() { delete[] _data; }
 
 
